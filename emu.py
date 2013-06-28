@@ -26,6 +26,14 @@ def printRegs():
 	print 'PC: ' + str(PC)
 
 f = open('code.obj', 'r')
+
+opcodes = []
+for line in f:
+    for item in string.split(line.rstrip(), ' '):
+        opcodes.append( item )
+
+print opcodes 
+
 for line in f:
 	line = string.split(line.rstrip(), ' ')
 
