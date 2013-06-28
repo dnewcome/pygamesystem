@@ -34,16 +34,14 @@ for line in f:
 
 print opcodes 
 
-for line in f:
-	line = string.split(line.rstrip(), ' ')
-
-	if line[0] == '0xA009':
-		print 'Instruction: LDA ' + line[1]
-		AC = int( line[1], 16 )
+while( PC < 50 ):
+	if opcodes[PC] == '0xA009':
+		print 'Instruction: LDA ' + opcodes[PC+1]
+		AC = int( opcodes[PC+1], 16 )
 		PC += 2
 		printRegs()
 
-	elif line[0] == '0xA00A':
+	elif opcodes[PC] == '0xA00A':
 		print 'Instruction: LSR A'
 		if AC & 0b00000001:
 			# set carry bit
@@ -58,10 +56,10 @@ for line in f:
 
 	# placeholder
 	# todo: put proper opcode in
-	elif line[0] == '0xA00B':
+	elif opcodes[PC] == '0xA00B':
 		print 'Instruction: MOV xxxxx'
 		print line
-		mem[int( line[1], 16 )] = int( line[2], 16 );
+		mem[int( opcodes[PC+1], 16 )] = int( opcodes[PC+2], 16 );
 		PC += 3
 		printRegs()
 		print mem
