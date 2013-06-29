@@ -37,6 +37,7 @@ def render( windowSurface, mem ):
 r = 0
 while True:
     r += 1
+    emu.tick()
     render( windowSurface, emu.mem )
     pygame.time.wait(10)
     for event in pygame.event.get():

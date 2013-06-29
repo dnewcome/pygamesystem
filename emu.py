@@ -29,12 +29,16 @@ f = open('code.obj', 'r')
 
 opcodes = []
 for line in f:
-    for item in string.split(line.rstrip(), ' '):
-        opcodes.append( item )
+	if( not line.startswith('#') ):
+		for item in string.split(line.rstrip(), ' '):
+			opcodes.append( item )
 
 print opcodes 
 
-while( PC < 50 ):
+	        
+def tick():
+	global PC
+	global AC
 	if opcodes[PC] == '0xA009':
 		print 'Instruction: LDA ' + opcodes[PC+1]
 		AC = int( opcodes[PC+1], 16 )
@@ -58,9 +62,34 @@ while( PC < 50 ):
 	# todo: put proper opcode in
 	elif opcodes[PC] == '0xA00B':
 		print 'Instruction: MOV xxxxx'
-		print line
 		mem[int( opcodes[PC+1], 16 )] = int( opcodes[PC+2], 16 );
 		PC += 3
+		printRegs()
+		print mem
+
+	# placeholder
+	# todo: put proper opcode in
+	elif opcodes[PC] == '0xA00C':
+		print 'Instruction: JMP xxxxx'
+		PC = int(opcodes[PC+1], 16)
+		printRegs()
+		print mem
+
+	# placeholder
+	# todo: put proper opcode in
+	elif opcodes[PC] == '0xA00D':
+		print 'Instruction: INA xxxxx'
+		AC += 1
+		PC += 1
+		printRegs()
+		print mem
+
+	# placeholder
+	# todo: put proper opcode in
+	elif opcodes[PC] == '0xA00E':
+		print 'Instruction: MOVA xxxxx'
+		mem[int( opcodes[PC+1], 16 )] = AC;
+		PC += 2
 		printRegs()
 		print mem
 
