@@ -36,7 +36,7 @@ def render( windowSurface, mem ):
 while True:
 	emu.tick()
 	render( windowSurface, emu.mem )
-	pygame.time.wait(10)
+	pygame.time.wait(20)
 	for event in pygame.event.get():
 		if event.type == QUIT:
 			print 'quitting'
