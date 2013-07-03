@@ -1,0 +1,28 @@
+### test program
+# load A with initial value
+0xA009 0x0008
+# set framebuffer bit
+0xA00E 0x002C 
+## read joystick
+# compare mem location 99 with D
+0xB001 0x0063 0x0010
+# jump if eq
+0xB002 0x0010 
+# compare mem location 99 with A
+0xB001 0x0063 0x0004
+# jump if eq
+0xB002 0x0015 
+# jump to beginning
+0xA00C 0x0004
+# increment A
+0xA00D
+# set framebuffer bit
+0xA00E 0x002C
+# jump to beginning
+0xA00C 0x0004
+# decrement A
+0xB00D
+# set framebuffer bit
+0xA00E 0x002C
+# jump to beginning
+0xA00C 0x0004
