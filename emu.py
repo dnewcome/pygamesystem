@@ -1,5 +1,7 @@
 import sys, array, string
 
+TRACE = False
+
 # registers
 PC = 0
 AC = 0
@@ -17,15 +19,38 @@ D = 0b00000100
 I = 0b00000010
 C = 0b00000001
 
+# zero - not sure if this is part of 
+# 6500 arch
+Z = 0b10000000
+
 # ram = array.array('B', '123')
 mem = [0 for x in range(100)]
 
 def printRegs():
-	print 'AC: ' + str(AC)
-	print 'SR: ' + str(SR)
-	print 'PC: ' + str(PC)
+	if(TRACE):
+		print 'AC: ' + str(AC)
+		print 'SR: ' + str(SR)
+		print 'PC: ' + str(PC)
 
-f = open('code.obj', 'r')
+f = open('code2.obj', 'r')
+
+def dec_eight( val ):
+	val -= 1
+	if( val < 0 ): 
+		return 255
+	else:
+		return val
+
+def inc_eight( val ):
+	val += 1
+	if( val > 255 ): 
+		return 0 
+	else:
+		return val
+
+def trace( msg ):
+	if( TRACE ):
+		print msg
 
 opcodes = []
 for line in f:
@@ -35,18 +60,21 @@ for line in f:
 
 print opcodes 
 
-	        
+			
 def tick():
 	global PC
 	global AC
+	global SR
+
 	if opcodes[PC] == '0xA009':
-		print 'Instruction: LDA ' + opcodes[PC+1]
+		trace( 'Instruction: LDA ' + opcodes[PC+1] )
 		AC = int( opcodes[PC+1], 16 )
 		PC += 2
 		printRegs()
+		trace( mem )
 
 	elif opcodes[PC] == '0xA00A':
-		print 'Instruction: LSR A'
+		trace( 'Instruction: LSR A' )
 		if AC & 0b00000001:
 			# set carry bit
 			SR |= C
@@ -57,42 +85,93 @@ def tick():
 		AC = AC >> 1
 		PC += 1
 		printRegs()
+		trace( mem )
 
 	# placeholder
 	# todo: put proper opcode in
 	elif opcodes[PC] == '0xA00B':
-		print 'Instruction: MOV xxxxx'
+		trace('Instruction: MOV xxxxx')
 		mem[int( opcodes[PC+1], 16 )] = int( opcodes[PC+2], 16 );
 		PC += 3
 		printRegs()
-		print mem
+		trace( mem )
 
 	# placeholder
 	# todo: put proper opcode in
 	elif opcodes[PC] == '0xA00C':
-		print 'Instruction: JMP xxxxx'
+		trace('Instruction: JMP xxxxx')
 		PC = int(opcodes[PC+1], 16)
 		printRegs()
-		print mem
+		trace(mem)
 
 	# placeholder
 	# todo: put proper opcode in
 	elif opcodes[PC] == '0xA00D':
-		print 'Instruction: INA xxxxx'
-		AC += 1
+		trace('Instruction: INA xxxxx')
+		AC = inc_eight( AC )
+   		PC += 1
+		printRegs()
+		trace(mem)
+
+	# placeholder
+	# todo: put proper opcode in
+	# decrement A
+	elif opcodes[PC] == '0xB00D':
+		trace('Instruction: DEA xxxxx')
+		AC = dec_eight( AC )
 		PC += 1
 		printRegs()
-		print mem
+		trace(mem)
 
 	# placeholder
 	# todo: put proper opcode in
 	elif opcodes[PC] == '0xA00E':
-		print 'Instruction: MOVA xxxxx'
+		trace('Instruction: MOVA xxxxx')
 		mem[int( opcodes[PC+1], 16 )] = AC;
 		PC += 2
 		printRegs()
-		print mem
+		trace(mem)
+
+	# placeholder
+	# todo: put proper opcode in
+	# compare memory location with immediate
+	elif opcodes[PC] == '0xB001':
+		trace('Instruction: CMP xxxxx')
+		if( mem[int( opcodes[PC+1], 16 )] == int( opcodes[PC+2], 16 ) ):
+			# set zero bit
+			SR |= Z
+		else:
+			# clear zero bit
+			SR &= ~Z
+				
+		PC += 3
+		printRegs()
+		trace(mem)
+
+	# placeholder
+	# todo: put proper opcode in
+	# branch if zero
+	elif opcodes[PC] == '0xB002':
+		trace('Instruction: BRZ xxxxx')
+		if( SR & Z == Z ):
+			PC = int( opcodes[PC+1], 16 )
+		else:
+			# clear zero bit
+			PC += 2
+				
+		printRegs()
+		trace(mem)
+
+	# placeholder
+	# todo: put proper opcode in
+	# branch if zero
+	elif opcodes[PC] == '0xB003':
+		trace('Instruction: HLT xxxxx')
+		printRegs()
+		trace(mem)
+		sys.exit()
 
 	else:	
-		print 'invalid opcode'
+		print 'invalid opcode: ' + opcodes[PC] + ' PC: ' + str(PC)
+		sys.exit()
 

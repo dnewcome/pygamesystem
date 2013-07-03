@@ -31,16 +31,39 @@ def render( windowSurface, mem ):
 	for i in range (0, 100):
 		pygame.draw.circle(windowSurface, BLUE, (i%10*50, i/10*50), mem[i], 0)
 	pygame.display.update()
-	print 'rendering ' + str(r)
 
 # run the game loop
-r = 0
 while True:
-    r += 1
-    emu.tick()
-    render( windowSurface, emu.mem )
-    pygame.time.wait(10)
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
+	emu.tick()
+	render( windowSurface, emu.mem )
+	pygame.time.wait(10)
+	for event in pygame.event.get():
+		if event.type == QUIT:
+			print 'quitting'
+			pygame.quit()
+			sys.exit()
+		# joystick is memory mapped to last byte of
+		# address space
+		elif event.type == KEYUP:
+			if( event.key == K_RETURN ):
+				emu.mem[99] &= ~( 1 << 0 )
+			elif( event.key == K_w ):
+				emu.mem[99] &= ~( 1 << 1 )
+			elif( event.key == K_a ):
+				emu.mem[99] &= ~( 1 << 2 )
+			elif( event.key == K_s ):
+				emu.mem[99] &= ~( 1 << 3 )
+			elif( event.key == K_d ):
+				emu.mem[99] &= ~( 1 << 4 )
+		elif event.type == KEYDOWN:
+			if( event.key == K_RETURN ):
+				emu.mem[99] |= ( 1 << 0 )
+			elif( event.key == K_w ):
+				emu.mem[99] |= ( 1 << 1 )
+			elif( event.key == K_a ):
+				emu.mem[99] |= ( 1 << 2 )
+			elif( event.key == K_s ):
+				emu.mem[99] |= ( 1 << 3 )
+			elif( event.key == K_d ):
+				emu.mem[99] |= ( 1 << 4 )
+

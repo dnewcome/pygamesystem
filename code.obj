@@ -1,6 +1,6 @@
 # test program
 # load A
-0xA009 0x0001
+0xA009 0x0006
 # increment A
 0xA00D
 # set framebuffer bit
