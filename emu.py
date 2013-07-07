@@ -1,4 +1,5 @@
 import sys, array, string
+import asm
 
 TRACE = False
 
@@ -52,6 +53,9 @@ def trace( msg ):
 	if( TRACE ):
 		print msg
 
+
+opcodes = asm.opcodes 
+'''
 opcodes = []
 for line in f:
 	if( not line.startswith('#') ):
@@ -59,6 +63,7 @@ for line in f:
 			opcodes.append( item )
 
 print opcodes 
+'''
 
 			
 def tick():
