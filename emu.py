@@ -1,7 +1,8 @@
 import sys, array, string
 import asm
 
-TRACE = False
+#TRACE = False
+TRACE = True 
 
 # registers
 PC = 0
