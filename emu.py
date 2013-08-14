@@ -34,7 +34,7 @@ def printRegs():
 		print 'SR: ' + str(SR)
 		print 'PC: ' + str(PC)
 
-f = open('code2.obj', 'r')
+f = open('code3.obj', 'r')
 
 def dec_eight( val ):
 	val -= 1

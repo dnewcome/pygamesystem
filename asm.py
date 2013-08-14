@@ -30,10 +30,12 @@ def decode( op ):
 	else:
 		return op, 1
 
+"""
 for line in f:
 	if( line.startswith('\t') ):
 		labels.append( line[0] )
 		current_opcode += decode(string.split(line.rstrip(), ' ')[0])[0]
+"""
 
 ## pass for labels
 """
