@@ -1,6 +1,8 @@
 import sys, string
 
 opcodes = []
+labels = []
+current_opcode = 0
 
 f = open('code2.asm', 'r')
 
@@ -27,6 +29,19 @@ def decode( op ):
 		return '0xB003', 1
 	else:
 		return op, 1
+
+for line in f:
+	if( line.startswith('\t') ):
+		labels.append( line[0] )
+		current_opcode += decode(string.split(line.rstrip(), ' ')[0])[0]
+
+## pass for labels
+"""
+for line in f:
+	if( not line.startswith('#') and not line.startswith( '\n' ) ):
+		for item in string.split(line.rstrip(), ' '):
+			current_opcode += ( decode(item)[1] )
+"""
 
 for line in f:
 	if( not line.startswith('#') and not line.startswith( '\n' ) ):
